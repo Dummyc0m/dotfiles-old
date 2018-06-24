@@ -262,7 +262,7 @@ values."
    ;;                       text-mode
    ;;   :size-limit-kb 1000)
    ;; (default nil)
-   dotspacemacs-line-numbers nil
+   dotspacemacs-line-numbers t
    ;; Code folding method. Possible values are `evil' and `origami'.
    ;; (default 'evil)
    dotspacemacs-folding-method 'evil
@@ -318,13 +318,16 @@ you should place your code here."
   (latex-preview-pane-enable)
   (setq js2-strict-missing-semi-warning nil)
   (setq js2-missing-semi-one-line-override nil)
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . react-mode))
+  (push '("\\.js\\'" . react-mode) auto-mode-alist)
   (defun my-setup-indent (n)
     ;; java/c/c++
+    (setq standard-indent n)
+    (setq tab-width n)
+    (setq indent-tabs-mode nil)
     (setq c-basic-offset n)
     ;; web development
     (setq javascript-indent-level n) ; javascript-mode
-    ;; (setq js-indent-level n) ; js-mode
+    (setq js-indent-level n) ; js-mode
     (setq js2-basic-offset n) ; js2-mode, in latest js2-mode, it's alias of js-indent-level
     (setq web-mode-markup-indent-offset n) ; web-mode, html tag in html file
     (setq web-mode-css-indent-offset n) ; web-mode, css in html file
@@ -332,21 +335,16 @@ you should place your code here."
     (setq web-mode-attr-indent-offset n) ; web-mode, attr indent
     (setq css-indent-offset n) ; css-mode
     )
-  (my-setup-indent 2)
-;;  (add-hook 'web-mode-hook (lambda () (if (equal web-mode-content-type "javascript") (web-mode-set-content-type "jsx") (message "now set to: %s" web-mode-content-type))))
-;;  (setq-default
-;;   ;; js2-mode
-;;   js2-basic-offset 2
-;;   ;; web-mode
-;;   css-indent-offset 2
-;;   web-mode-markup-indent-offset 2
-;;   web-mode-css-indent-offset 2
-;;   web-mode-code-indent-offset 2
-;;   web-mode-attr-indent-offset 2)
-  (with-eval-after-load 'web-mode
-    (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
-    (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
-    (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil)))
+;; (my-setup-indent 2)
+  (add-hook 'web-mode-hook (lambda () (if (equal web-mode-content-type "javascript") (web-mode-set-content-type "jsx") (message "now set to: %s" web-mode-content-type))))
+  (with-eval-after-load 'flycheck
+    (setq-default flycheck-disabled-checkers
+                  (append flycheck-disabled-checkers
+                          '(json-python-json))))
+;;  (with-eval-after-load 'web-mode
+;;    (add-to-list 'web-mode-indentation-params '("lineup-args" . nil))
+;;    (add-to-list 'web-mode-indentation-params '("lineup-concats" . nil))
+;;    (add-to-list 'web-mode-indentation-params '("lineup-calls" . nil)))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
