@@ -356,6 +356,20 @@ you should place your code here."
   (spacemacs/set-leader-keys-for-major-mode 'react-mode "i f" 'import-js-fix)
   ;; https://github.com/syl20bnr/spacemacs/issues/6520
   (clean-aindent-mode -1)
+  ;; auto-save
+  (defadvice switch-to-buffer (before save-buffer-now activate)
+    (when buffer-file-name (save-buffer)))
+  (defadvice other-window (before other-window-now activate)
+    (when buffer-file-name (save-buffer)))
+  (defadvice windmove-up (before other-window-now activate)
+    (when buffer-file-name (save-buffer)))
+  (defadvice windmove-down (before other-window-now activate)
+    (when buffer-file-name (save-buffer)))
+  (defadvice windmove-left (before other-window-now activate)
+    (when buffer-file-name (save-buffer)))
+  (defadvice windmove-right (before other-window-now activate)
+    (when buffer-file-name (save-buffer)))
+  (add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
